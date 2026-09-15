@@ -3,16 +3,7 @@ import { createContext, useContext, useState, useEffect, useRef, useCallback } f
 const ChatContext = createContext(null)
 
 const DEFAULT_SETTINGS = {
-  apiEndpoint: 'https://api.openai.com/v1/chat/completions',
-  apiKey: '',
-  model: 'gpt-4o-mini',
-  temperature: 0.7,
-  systemPrompt: 'Kamu adalah asisten AI yang membantu dan ramah. Jawab dalam bahasa yang user gunakan.',
-  maxTokens: 4096,
-}
-
-const EMPTY_SETTINGS = {
-  apiEndpoint: 'http://localhost:11434/v1/chat/completions',
+  apiEndpoint: 'https://8800-6d8ddd56-4a77-406d-9a8d-71689b08593d.apps.daytona.io/v1/chat/completions',
   apiKey: '',
   model: 'opencode/big-pickle',
   temperature: 0.7,
@@ -46,9 +37,7 @@ export function ChatProvider({ children }) {
   }, [settings])
 
   useEffect(() => {
-    if (!settings.apiKey && conversations.length === 0) {
-      setShowAPIKeyModal(true)
-    }
+    // No auto-modal on first visit - OpenCode is pre-configured
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -105,8 +94,8 @@ export function ChatProvider({ children }) {
   }, [])
 
   const sendMessage = useCallback(async (content, images = []) => {
-    if (!settings.apiKey) {
-      setShowAPIKeyModal(true)
+    if (!settings.apiEndpoint) {
+      setSettingsOpen(true)
       return
     }
 

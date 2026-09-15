@@ -147,7 +147,7 @@ export default function ChatArea({ onOpenSidebar, onOpenSettings }) {
             </optgroup>
           </select>
 
-          {!settings.apiKey && (
+          {!settings.apiKey && settings.apiEndpoint.includes('openai.com') && (
             <button
               onClick={onOpenSettings}
               className="text-xs bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-3 py-1.5 transition-colors font-medium"
@@ -283,18 +283,18 @@ function WelcomeScreen({ onSuggestion, onSettings }) {
         Ask me anything - I'm here to help with whatever you need.
       </p>
 
-      {!settings.apiKey && (
-        <button
-          onClick={onSettings}
-          className="mb-10 bg-[#171717] border border-[#2e2e2e] hover:border-purple-500/50 hover:bg-[#1c1c1f] text-sm px-4 py-2 rounded-xl transition-all flex items-center gap-2"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5z" />
-            <circle cx="12" cy="15" r="1.5" fill="currentColor" />
-          </svg>
-          Add API Key
-        </button>
-      )}
+      {!settings.apiKey && settings.apiEndpoint.includes('openai.com') && (
+            <button
+              onClick={onSettings}
+              className="mb-10 bg-[#171717] border border-[#2e2e2e] hover:border-purple-500/50 hover:bg-[#1c1c1f] text-sm px-4 py-2 rounded-xl transition-all flex items-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5z" />
+                <circle cx="12" cy="15" r="1.5" fill="currentColor" />
+              </svg>
+              Add API Key
+            </button>
+          )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
         {SUGGESTIONS.map((s) => (
