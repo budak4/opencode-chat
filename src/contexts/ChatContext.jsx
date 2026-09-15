@@ -2,8 +2,12 @@ import { createContext, useContext, useState, useEffect, useRef, useCallback } f
 
 const ChatContext = createContext(null)
 
-const DEFAULT_SETTINGS = {
-  apiEndpoint: '/v1/chat/completions',
+const BRIDGE_ENDPOINT = 'https://8800-6d8ddd56-4a77-406d-9a8d-71689b08593d.apps.daytona.io/v1/chat/completions'
+
+export const DEFAULT_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || BRIDGE_ENDPOINT
+
+export const DEFAULT_SETTINGS = {
+  apiEndpoint: DEFAULT_ENDPOINT,
   apiKey: '',
   model: 'opencode/big-pickle',
   temperature: 0.7,

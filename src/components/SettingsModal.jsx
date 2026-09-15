@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
+import { DEFAULT_ENDPOINT, DEFAULT_SETTINGS } from '../contexts/ChatContext'
 
 const PRESET_ENDPOINTS = [
-  { label: 'OpenCode (Big Pickle)', value: '/v1/chat/completions', placeholder: '', models: ['opencode/big-pickle'] },
+  { label: 'OpenCode (Big Pickle)', value: DEFAULT_ENDPOINT, placeholder: '', models: ['opencode/big-pickle'] },
   { label: 'OpenAI', value: 'https://api.openai.com/v1/chat/completions', placeholder: 'sk-...', models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'] },
   { label: 'Anthropic (proxy)', value: 'https://api.anthropic.com/v1/messages', placeholder: 'sk-ant-...', models: ['claude-3-5-sonnet-20241022'] },
   { label: 'Ollama (local)', value: 'http://localhost:11434/v1/chat/completions', placeholder: 'ollama', models: ['llama3.1:8b', 'mistral:7b', 'codellama:7b'] },
@@ -61,23 +62,10 @@ export default function SettingsModal({ onClose }) {
   }
 
   const handleReset = () => {
-    setForm({
-      apiEndpoint: '/v1/chat/completions',
-      apiKey: '',
-      model: 'opencode/big-pickle',
-      temperature: 0.7,
-      systemPrompt: 'Kamu adalah asisten AI yang membantu dan ramah. Jawab dalam bahasa yang user gunakan.',
-      maxTokens: 4096,
-    })
+    const resetSettings = { ...DEFAULT_SETTINGS, apiEndpoint: DEFAULT_ENDPOINT }
+    setForm(resetSettings)
     setEndpointPreset(PRESET_ENDPOINTS[0].value)
-    setSettings({
-      apiEndpoint: '/v1/chat/completions',
-      apiKey: '',
-      model: 'opencode/big-pickle',
-      temperature: 0.7,
-      systemPrompt: 'Kamu adalah asisten AI yang membantu dan ramah. Jawab dalam bahasa yang user gunakan.',
-      maxTokens: 4096,
-    })
+    setSettings(resetSettings)
   }
 
   const inputClass = "w-full bg-[#171717] border border-[#2e2e2e] rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/20 transition-all"
