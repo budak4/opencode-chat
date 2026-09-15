@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
 
 const PRESET_ENDPOINTS = [
-  { label: 'OpenCode (Big Pickle)', value: 'https://8800-6d8ddd56-4a77-406d-9a8d-71689b08593d.apps.daytona.io/v1/chat/completions', placeholder: '', models: ['opencode/big-pickle'] },
+  { label: 'OpenCode (Big Pickle)', value: '/v1/chat/completions', placeholder: '', models: ['opencode/big-pickle'] },
   { label: 'OpenAI', value: 'https://api.openai.com/v1/chat/completions', placeholder: 'sk-...', models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'] },
   { label: 'Anthropic (proxy)', value: 'https://api.anthropic.com/v1/messages', placeholder: 'sk-ant-...', models: ['claude-3-5-sonnet-20241022'] },
   { label: 'Ollama (local)', value: 'http://localhost:11434/v1/chat/completions', placeholder: 'ollama', models: ['llama3.1:8b', 'mistral:7b', 'codellama:7b'] },
@@ -62,7 +62,7 @@ export default function SettingsModal({ onClose }) {
 
   const handleReset = () => {
     setForm({
-      apiEndpoint: 'https://8800-6d8ddd56-4a77-406d-9a8d-71689b08593d.apps.daytona.io/v1/chat/completions',
+      apiEndpoint: '/v1/chat/completions',
       apiKey: '',
       model: 'opencode/big-pickle',
       temperature: 0.7,
@@ -71,7 +71,7 @@ export default function SettingsModal({ onClose }) {
     })
     setEndpointPreset(PRESET_ENDPOINTS[0].value)
     setSettings({
-      apiEndpoint: 'https://8800-6d8ddd56-4a77-406d-9a8d-71689b08593d.apps.daytona.io/v1/chat/completions',
+      apiEndpoint: '/v1/chat/completions',
       apiKey: '',
       model: 'opencode/big-pickle',
       temperature: 0.7,

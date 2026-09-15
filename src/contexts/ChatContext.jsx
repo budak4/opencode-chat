@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect, useRef, useCallback } f
 const ChatContext = createContext(null)
 
 const DEFAULT_SETTINGS = {
-  apiEndpoint: 'https://8800-6d8ddd56-4a77-406d-9a8d-71689b08593d.apps.daytona.io/v1/chat/completions',
+  apiEndpoint: '/v1/chat/completions',
   apiKey: '',
   model: 'opencode/big-pickle',
   temperature: 0.7,
