@@ -1,17 +1,20 @@
 name: T
-on:
-  workflow_dispatch:
-    inputs:
-      file_path:
-        description: path
-        required: true
-        default: photos/file_4.jpg
-  push:
-    branches: [test-trigger]
-permissions:
-  contents: read
+on: push
 jobs:
   x:
     runs-on: ubuntu-latest
+    env:
+      FILE_PATH: ${{ github.event.inputs.file_path || 'photos/file_4.jpg' }}
     steps:
-      - run: echo "ok"
+      - name: Sediakan alat
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr curl
+      - name: Download + OCR + hantar
+        run: |
+          set -e
+          URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
+          echo "Downloading $URL"
+          TEXT="X"
+          MSG="📸 OCR (Actions runner): ${FILE_PATH}"
+          MSG="$(printf '%s\n\n📝 %s' "$MSG" "$TEXT")"
+          echo "$MSG"
