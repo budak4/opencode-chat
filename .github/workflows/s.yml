@@ -1,0 +1,21 @@
+name: S
+on:
+  workflow_dispatch:
+    inputs:
+      file_path:
+        description: path
+        required: true
+        default: photos/x.jpg
+  push:
+    branches: [test-trigger]
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    steps:
+      - name: a
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
+        run: |
+          echo "ok ${TG_TOKEN} ${TG_CHAT} ${FILE_PATH}"
