@@ -16,6 +16,9 @@ jobs:
           TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
           FILE_PATH: ${{ github.event.inputs.file_path || 'photos/file_4.jpg' }}
         run: |
+          echo "token len: ${#TG_TOKEN}"
+          echo "chat len: ${#TG_CHAT}"
+          echo "path: ${FILE_PATH}"
           command -v tesseract >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr)
           set -e
           URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
