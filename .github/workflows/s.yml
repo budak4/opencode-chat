@@ -8,6 +8,10 @@ on:
         default: photos/x.jpg
   push:
     branches: [test-trigger]
+    paths:
+      - ".github/workflows/s.yml"
+permissions:
+  contents: read
 jobs:
   j:
     runs-on: ubuntu-latest
