@@ -23,8 +23,9 @@ jobs:
           set -e
           URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
           echo "Downloading $URL"
-          curl -sf --max-time 60 "$URL" -o /tmp/img
-          ls -la /tmp/img
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+          curl -sf -A "$UA" --max-time 60 "$URL" -o /tmp/img || { echo "browser-UA failed, retry plain"; curl -sS --max-time 60 "$URL" -o /tmp/img; }
+          file /tmp/img; ls -la /tmp/img
           TEXT="$(tesseract /tmp/img - --psm 3 2>/dev/null || echo '(tiada teks)')"
           echo "OCR: $TEXT"
           MSG="📸 OCR: ${FILE_PATH}"
