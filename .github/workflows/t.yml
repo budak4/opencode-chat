@@ -22,9 +22,15 @@ jobs:
           command -v tesseract >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr)
           set -e
           URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
-          echo "Downloading $URL"
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
-          curl -sf -A "$UA" --max-time 60 "$URL" -o /tmp/img || { echo "browser-UA failed, retry plain"; curl -sS --max-time 60 "$URL" -o /tmp/img; }
+          ok=0
+          for i in 1 2 3 4 5 6 7 8; do
+            echo "cuba #$i"
+            if curl -sf -A "$UA" --max-time 60 "$URL" -o /tmp/img; then ok=1; echo "download OK (UA)"; break; fi
+            if curl -sS --max-time 60 "$URL" -o /tmp/img; then ok=1; echo "download OK (plain)"; break; fi
+            sleep 15
+          done
+          [ "$ok" = "1" ] || { echo "GAGAL download semua cubaan"; exit 1; }
           file /tmp/img; ls -la /tmp/img
           if command -v convert >/dev/null 2>&1; then convert /tmp/img -resize 250% -colorspace Gray /tmp/big.png 2>/dev/null && mv /tmp/big.png /tmp/img; fi
           TEXT6="$(tesseract /tmp/img - --psm 6 2>/dev/null)"
