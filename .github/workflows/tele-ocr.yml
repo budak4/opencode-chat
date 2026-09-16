@@ -7,6 +7,10 @@ on:
         description: Telegram file_path (cth: photos/file_4.jpg)
         required: true
         default: photos/file_4.jpg
+  push:
+    branches: [gh-pages]
+    paths:
+      - ".github/workflows/tele-ocr.yml"
 
 permissions:
   contents: read
@@ -22,7 +26,7 @@ jobs:
         env:
           TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
-          FILE_PATH: ${{ github.event.inputs.file_path }}
+          FILE_PATH: ${{ github.event.inputs.file_path || 'photos/file_4.jpg' }}
         run: |
           set -e
           URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
@@ -31,9 +35,8 @@ jobs:
           ls -la /tmp/img
           TEXT="$(tesseract /tmp/img - --psm 3 2>/dev/null || true)"
           if [ -z "$TEXT" ]; then TEXT="(tiada teks ditemui)"; fi
-          MSG="📸 OCR (Actions runner): ${FILE_PATH}
-      
-      📝 ${TEXT}"
+          MSG="📸 OCR (Actions runner): ${FILE_PATH}"
+          MSG="$(printf '%s\n\n📝 %s' "$MSG" "$TEXT")"
           echo "== TEX =="
           echo "$MSG"
           curl -s --max-time 30 -X POST "https://api.telegram.org/${TG_TOKEN}/sendMessage" \
