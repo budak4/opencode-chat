@@ -27,8 +27,15 @@ jobs:
           curl -sf -A "$UA" --max-time 60 "$URL" -o /tmp/img || { echo "browser-UA failed, retry plain"; curl -sS --max-time 60 "$URL" -o /tmp/img; }
           file /tmp/img; ls -la /tmp/img
           if command -v convert >/dev/null 2>&1; then convert /tmp/img -resize 250% -colorspace Gray /tmp/big.png 2>/dev/null && mv /tmp/big.png /tmp/img; fi
-          TEXT="$(tesseract /tmp/img - --psm 6 2>/dev/null || echo '(tiada teks)')"
+          TEXT6="$(tesseract /tmp/img - --psm 6 2>/dev/null)"
+          TEXT3="$(tesseract /tmp/img - --psm 3 2>/dev/null)"
+          if [ -n "$TEXT6" ]; then TEXT="$TEXT6"; elif [ -n "$TEXT3" ]; then TEXT="$TEXT3"; else TEXT="(tiada teks)"; fi
           echo "OCR: $TEXT"
           MSG="📸 OCR: ${FILE_PATH}"
           MSG="$(printf '%s\n\n📝 %s' "$MSG" "$TEXT")"
           curl -s --max-time 30 -X POST "https://api.telegram.org/${TG_TOKEN}/sendMessage" --data-urlencode "chat_id=${TG_CHAT}" --data-urlencode "text=${MSG}"
+      - name: Upload hasil
+        uses: actions/upload-artifact@v4
+        with:
+          name: ocr-img
+          path: /tmp/img
