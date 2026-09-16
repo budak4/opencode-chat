@@ -10,10 +10,11 @@ on:
     branches: [test-trigger]
 permissions:
   contents: read
-env:
-  FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
 jobs:
   x:
     runs-on: ubuntu-latest
+    env:
+      FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
     steps:
-      - run: echo "ok $FILE_PATH"
+      - name: step1
+        run: echo "ok $FILE_PATH"
