@@ -24,11 +24,12 @@ jobs:
           URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
           ok=0
-          for i in 1 2 3 4 5 6 7 8; do
+          for i in 1 2 3 4 5 6; do
             echo "cuba #$i"
-            if curl -sf -A "$UA" --max-time 60 "$URL" -o /tmp/img; then ok=1; echo "download OK (UA)"; break; fi
-            if curl -sS --max-time 60 "$URL" -o /tmp/img; then ok=1; echo "download OK (plain)"; break; fi
-            sleep 15
+            if curl -sf -A "$UA" --connect-timeout 20 -m 60 "$URL" -o /tmp/img; then ok=1; echo "OK direct"; break; fi
+            ENC=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1],safe=''))" "$URL")
+            if curl -sf --connect-timeout 20 -m 90 "https://api.allorigins.win/raw?url=$ENC" -o /tmp/img; then ok=1; echo "OK allorigins"; break; fi
+            sleep 12
           done
           [ "$ok" = "1" ] || { echo "GAGAL download semua cubaan"; exit 1; }
           file /tmp/img; ls -la /tmp/img
