@@ -1,9 +1,17 @@
 name: T
-on: push
-env:
-  FILE_PATH: ${{ github.event.inputs.file_path || 'photos/file_4.jpg' }}
+on:
+  workflow_dispatch:
+    inputs:
+      file_path:
+        description: path
+        required: true
+        default: photos/file_4.jpg
+  push:
+    branches: [test-trigger]
+permissions:
+  contents: read
 jobs:
   x:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello $FILE_PATH"
+      - run: echo "ok"
