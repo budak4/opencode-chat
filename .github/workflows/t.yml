@@ -16,5 +16,11 @@ jobs:
         env:
           FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
         run: |
+          URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
+          echo "Downloading $URL"
+          curl -s --fail --max-time 60 "$URL" -o /tmp/img
+          ls -la /tmp/img
           TEXT="$(tesseract /tmp/img - --psm 3 2>/dev/null || true)"
-          echo "ok ${TEXT}"
+          if [ -z "$TEXT" ]; then TEXT="(tiada teks ditemui)"; fi
+          echo "== TEX =="
+          echo "$TEXT"
