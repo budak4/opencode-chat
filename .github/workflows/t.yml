@@ -13,8 +13,8 @@ permissions:
 jobs:
   x:
     runs-on: ubuntu-latest
-    env:
-      FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
     steps:
       - name: step1
+        env:
+          FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
         run: echo "ok $FILE_PATH"
