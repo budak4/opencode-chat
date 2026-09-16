@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       file_path:
-        description: Telegram file_path di Telegram (cth: photos/file_4.jpg)
+        description: Telegram file_path
         required: true
         default: photos/file_4.jpg
   push:
@@ -16,9 +16,6 @@ jobs:
   j:
     runs-on: ubuntu-latest
     steps:
-      - name: Sediakan alat
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr curl
       - name: Download + OCR + hantar
         env:
           TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -27,6 +24,7 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then echo "skip (push event)"; exit 0; fi
           set -e
+          tesseract --version | head -1
           URL="https://api.telegram.org/file/${TG_TOKEN}/${FILE_PATH}"
           echo "Downloading $URL"
           curl -s --fail --max-time 60 "$URL" -o /tmp/img
