@@ -9,8 +9,6 @@ on:
         default: photos/file_4.jpg
   push:
     branches: [test-trigger]
-    paths:
-      - ".github/workflows/tele-ocr.yml"
 
 permissions:
   contents: read
