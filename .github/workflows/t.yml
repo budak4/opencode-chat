@@ -33,10 +33,20 @@ jobs:
           done
           [ "$ok" = "1" ] || { echo "GAGAL download semua cubaan"; exit 1; }
           file /tmp/img; ls -la /tmp/img
-          if command -v convert >/dev/null 2>&1; then convert /tmp/img -resize 250% -colorspace Gray /tmp/big.png 2>/dev/null && mv /tmp/big.png /tmp/img; fi
-          TEXT6="$(tesseract /tmp/img - --psm 6 2>/dev/null)"
-          TEXT3="$(tesseract /tmp/img - --psm 3 2>/dev/null)"
-          if [ -n "$TEXT6" ]; then TEXT="$TEXT6"; elif [ -n "$TEXT3" ]; then TEXT="$TEXT3"; else TEXT="(tiada teks)"; fi
+          command -v convert >/dev/null 2>&1 && {
+            convert /tmp/img -colorspace Gray -resize 300% /tmp/gray.png 2>/dev/null
+            convert /tmp/img -colorspace Gray -resize 300% -negate -threshold 50% /tmp/bin.png 2>/dev/null
+            convert /tmp/img -colorspace Gray -resize 300% -negate /tmp/inv.png 2>/dev/null
+          }
+          best=""
+          for f in /tmp/img /tmp/gray.png /tmp/bin.png /tmp/inv.png; do
+            [ -f "$f" ] || continue
+            for psm in 3 6 11 13; do
+              out="$(tesseract "$f" - --psm $psm 2>/dev/null | tr -s '[:space:]')"
+              if [ -n "$out" ] && [ ${#out} -gt ${#best} ]; then best="$out"; fi
+            done
+          done
+          TEXT="${best:-(tiada teks)}"
           echo "OCR: $TEXT"
           MSG="📸 OCR: ${FILE_PATH}"
           MSG="$(printf '%s\n\n📝 %s' "$MSG" "$TEXT")"
