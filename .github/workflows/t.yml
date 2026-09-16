@@ -5,16 +5,16 @@ on:
       file_path:
         description: path
         required: true
-        default: photos/file_4.jpg
+        default: photos/x.jpg
   push:
     branches: [test-trigger]
-permissions:
-  contents: read
 jobs:
-  x:
+  ocr:
     runs-on: ubuntu-latest
     steps:
-      - name: step1
+      - name: dl
         env:
           FILE_PATH: ${{ github.event.inputs.file_path || 'PHOTO' }}
-        run: echo "ok $FILE_PATH"
+        run: |
+          TEXT="$(tesseract /tmp/img - --psm 3 2>/dev/null || true)"
+          echo "ok ${TEXT}"
